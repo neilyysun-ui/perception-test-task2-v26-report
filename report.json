@@ -174,6 +174,58 @@
       }
     }
   },
+  "verification": {
+    "scorable_anchors": 8121,
+    "bad_anchors": 1032,
+    "bad_anchor_share": 0.12707794606575545,
+    "bad_passed_by_all_flags": 756,
+    "recall_on_bad_anchors": 0.2674418604651163,
+    "flags": [
+      {
+        "name": "contains_described_object",
+        "rejected": 24,
+        "rejected_share": 0.0029553010712966383,
+        "median_iou_when_passed": 0.8823165615310808,
+        "median_iou_when_rejected": 0.6339543150870871,
+        "discrimination": 0.24836224644399374
+      },
+      {
+        "name": "is_tight",
+        "rejected": 349,
+        "rejected_share": 0.042975003078438614,
+        "median_iou_when_passed": 0.8842976671731064,
+        "median_iou_when_rejected": 0.7869582919946756,
+        "discrimination": 0.09733937517843083
+      },
+      {
+        "name": "is_amodal_complete",
+        "rejected": 1130,
+        "rejected_share": 0.1391454254402167,
+        "median_iou_when_passed": 0.8796853700349724,
+        "median_iou_when_rejected": 0.8973916043566709,
+        "discrimination": -0.01770623432169849
+      }
+    ]
+  },
+  "grid_coverage": {
+    "scored_frames": 23296,
+    "groups": {
+      "on_grid": {
+        "frames": 22231,
+        "share": 0.9542839972527473,
+        "edge_share": 0.09864603481624758,
+        "median_area_share": 0.013892114265185995,
+        "tiny_share": 0.0906391975169808
+      },
+      "off_grid": {
+        "frames": 1065,
+        "share": 0.045716002747252744,
+        "edge_share": 0.39906103286384975,
+        "median_area_share": 0.008141348176170737,
+        "tiny_share": 0.20093896713615023
+      }
+    }
+  },
   "cases": [
     {
       "key": "video_7110__q8",
@@ -221,7 +273,11 @@
           1,
           2
         ],
-        "target_speed": 0.073
+        "target_speed": 0.073,
+        "edge_frames": 0,
+        "off_grid_frames": 0,
+        "median_area_share": 0.01416,
+        "smallest_visible_pixels": 128.4
       },
       "stage1_event_scan": {
         "reasoning": "The person lifts the rightmost cup, revealing a small red object, and then places the cup back down over it. This cup is the target.",
@@ -1456,7 +1512,11 @@
         "look_alike_track_ids": [
           11
         ],
-        "target_speed": 5.309
+        "target_speed": 5.309,
+        "edge_frames": 7,
+        "off_grid_frames": 5,
+        "median_area_share": 0.00501,
+        "smallest_visible_pixels": 11.6
       },
       "stage1_event_scan": {
         "reasoning": "The person repeatedly places a small light blue cylindrical object on a slanted pink book and lets it roll down. This object is the one being launched.",
