@@ -142,7 +142,7 @@ frame the evaluator actually scores.</p>
 <hr class="rule">
 <h2>The case: video_7110__q8</h2>
 <p class="lede">&ldquo;The person uses multiple similar or identical objects to play an occlusion game. Track the object that occludes the smaller object.&rdquo;</p>
-<p>The video holds <strong>3 objects annotated with the same label</strong> (<code>cup</code>), and the answer is exactly one of them: track <code>id&nbsp;2</code>. Picking the wrong one costs the whole question. 21 frames are scored, out of 626.</p>
+<p>The video holds <strong>3 objects annotated with the same label</strong> (<code>cup</code>), and the answer is exactly one of them: track <code>id&nbsp;2</code>. Picking the wrong one costs the whole question. 21 of its 626 frames are scored.</p>
 <p class="meta mono">626 frames &middot; 30.005 fps &middot; 1280&times;720 &middot; event_scan 49s &middot; instance_disambiguation 20s &middot; trigger_ground 39s &middot; anchor_verify 9s</p>
 <div class="tiles"><div class="tile"><div class="k">Previous system, this question</div><div class="v bad">0.000</div><div class="d">HOTA &mdash; it tracked a different cup</div></div><div class="tile"><div class="k">This method, this question</div><div class="v">0.840</div><div class="d">HOTA</div></div><div class="tile"><div class="k">Difference</div><div class="v">+0.840</div><div class="d">same tracker, same video, only the anchors changed</div></div></div>
 <div class="step"><span class="n">Step 1</span>
@@ -166,8 +166,11 @@ system, wrong anchors sit on frames where the target moves 5&ndash;27&times; fas
 <p>Same frame budget, spent where the information is. These panels are cropped to the region the look-alikes occupy, and
 the boxes are ground truth added for the reader so the ambiguity is visible &mdash; the model saw the full frames with no
 boxes at all. The three objects are near-identical; only the event tells them apart.</p>
+<p class="note">Annotation runs at about 1&nbsp;Hz, so between annotated frames the drawn ground truth is a linear
+interpolation and each caption says which frames it came from. On a slow object that is a fair approximation; on a fast
+one it is not, and the caption is the warning.</p>
 <div class="legend"><span><span class="swatch" style="background:var(--series-gt)"></span>the answer, labelled <code>id*</code></span><span><span class="swatch" style="background:#f0f0f0;border:1px solid var(--border)"></span>the other same-label objects, labelled by id</span></div>
-<div class="grid g3"><figure><img loading="lazy" src="assets/video_7110__q8/event_000220.jpg" alt="event frame 220"><figcaption>frame 220 &middot; 7.33s</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000223.jpg" alt="event frame 223"><figcaption>frame 223 &middot; 7.43s</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000226.jpg" alt="event frame 226"><figcaption>frame 226 &middot; 7.53s</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000230.jpg" alt="event frame 230"><figcaption>frame 230 &middot; 7.67s</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000235.jpg" alt="event frame 235"><figcaption>frame 235 &middot; 7.83s</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000240.jpg" alt="event frame 240"><figcaption>frame 240 &middot; 8.00s</figcaption></figure></div>
+<div class="grid g3"><figure><img loading="lazy" src="assets/video_7110__q8/event_000220.jpg" alt="event frame 220"><figcaption>frame 220 &middot; 7.33s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000223.jpg" alt="event frame 223"><figcaption>frame 223 &middot; 7.43s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000226.jpg" alt="event frame 226"><figcaption>frame 226 &middot; 7.53s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000230.jpg" alt="event frame 230"><figcaption>frame 230 &middot; 7.67s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000235.jpg" alt="event frame 235"><figcaption>frame 235 &middot; 7.83s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7110__q8/event_000240.jpg" alt="event frame 240"><figcaption>frame 240 &middot; 8.00s &middot; GT exact</figcaption></figure></div>
 <div class="quote"><div class="k">Description before this stage</div>
 <p style="margin:6px 0 0">&ldquo;cup&rdquo; &mdash; a phrase that fits all 3 of them equally</p>
 <div class="k" style="margin-top:10px">Description after this stage</div>
@@ -192,7 +195,7 @@ can earn a true positive: the offered frames are restricted to that grid.</p>
 <span><span class="swatch" style="background:var(--series-v1)"></span>previous system</span>
 </div>
 <div class="grid g2"><figure><img loading="lazy" src="assets/video_7110__q8/trigger_000000.jpg" alt="trigger frame 0">
-<figcaption>trigger frame 0, original resolution &mdash; the previous system is on a different cup</figcaption></figure>
+<figcaption>trigger frame 0, original resolution &mdash; this method scores IoU 0.95 here, the previous system 0.00: it is on a different cup</figcaption></figure>
 <div><dl class="kv">
 <div><dt>frames offered</dt><dd class="mono">[0, 30, 90, 120, 180, 240, 270, 330]</dd></div>
 <div><dt>anchors returned</dt><dd class="mono">[0, 30, 90, 120, 180, 240, 270, 330]</dd></div>
@@ -202,8 +205,7 @@ can earn a true positive: the offered frames are restricted to that grid.</p>
 <p class="note">The previous system placed its anchors at [0, 20, 100, 210, 230, 270, 300, 310] &mdash; freely chosen frames, most of which the evaluator never reads.</p></div></div>
 <table><thead><tr><th>Anchors</th><th>Placed</th><th>On a scored frame</th><th>Median IoU vs GT</th><th>Per-anchor IoU</th></tr></thead>
 <tbody><tr class="best"><td>this method</td><td>8</td><td>8</td><td>0.882</td><td style="text-align:left" class="mono">0:0.95, 30:0.93, 90:0.95, 120:0.80, 180:0.68, 240:0.55, 270:0.91, 330:0.86</td></tr><tr><td>previous system</td><td>8</td><td>4</td><td>0.000</td><td style="text-align:left" class="mono">0:0.00, 210:0.00, 270:0.00, 300:0.00</td></tr></tbody></table>
-<p class="note">Every one of the previous system's scorable anchors has IoU <strong>0.000</strong>: it is not slightly
-off, it is on another object entirely.</p>
+<p class="note">Every one of the previous system's scorable anchors has IoU <strong>0.000</strong>: it is not slightly off, it is on another object entirely. What changes is where they land: 8 of 8 sit on a frame the evaluator reads, against 4 of 8.</p>
 </div>
 <div class="step"><span class="n">Step 4</span>
 <h3>Have a second, cheaper model check the pixels against the words</h3>
@@ -241,6 +243,109 @@ frames; the rest are propagated. The previous system is on the wrong cup from th
 </details></div>
 </div>
 <hr class="rule">
+<h2>The case: video_7276__q5</h2>
+<p class="lede">&ldquo;Track the launched object or objects.&rdquo;</p>
+<p>Only one object here carries the label <code>glue-stick</code>, so identity is not the difficulty. The difficulty is speed: the target moves <strong>5.31 of its own diagonals per second</strong>, which puts it in the fastest quarter of the benchmark. 14 of its 371 frames are scored.</p>
+<p class="meta mono">371 frames &middot; 30.006 fps &middot; 1920&times;1080 &middot; event_scan 38s &middot; instance_disambiguation 20s &middot; trigger_ground 16s &middot; anchor_verify 10s</p>
+<div class="tiles"><div class="tile"><div class="k">Previous system, this question</div><div class="v bad">0.252</div><div class="d">HOTA &mdash; it tracked a different cup</div></div><div class="tile"><div class="k">This method, this question</div><div class="v">0.265</div><div class="d">HOTA</div></div><div class="tile"><div class="k">Difference</div><div class="v">+0.013</div><div class="d">same tracker, same video, only the anchors changed</div></div></div>
+<div class="step"><span class="n">Step 1</span>
+<h3>Scan the whole video at 3 frames per second, and say when the deciding moment happens</h3>
+<p>These are frames from the cached 3 fps bank the first stage consumed &mdash; the complete view it had. It is asked for
+three things beyond a description: how many objects could be confused with the target, the shortest interval containing
+the evidence that singles the target out, and a rough position.</p>
+<div class="grid g4"><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000000.jpg" alt="frame 0"><figcaption>frame 0 &middot; 0.0s</figcaption></figure><figure class="mark"><img loading="lazy" src="assets/video_7276__q5/timeline_000050.jpg" alt="frame 50"><figcaption>frame 50 &middot; 1.7s &middot; in event window</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000110.jpg" alt="frame 110"><figcaption>frame 110 &middot; 3.7s</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000160.jpg" alt="frame 160"><figcaption>frame 160 &middot; 5.3s</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000210.jpg" alt="frame 210"><figcaption>frame 210 &middot; 7.0s</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000260.jpg" alt="frame 260"><figcaption>frame 260 &middot; 8.7s</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000320.jpg" alt="frame 320"><figcaption>frame 320 &middot; 10.7s</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/timeline_000370.jpg" alt="frame 370"><figcaption>frame 370 &middot; 12.3s</figcaption></figure></div>
+<div class="quote"><div class="k">What the model returned</div>
+<p style="color:var(--text-primary);margin:6px 0 0">&ldquo;The person repeatedly places a small light blue cylindrical object on a slanted pink book and lets it roll down. This object is the one being launched.&rdquo;</p></div>
+<dl class="kv">
+<div><dt>look-alike instances</dt><dd><strong>0</strong> other objects could be confused with the target</dd></div>
+<div><dt>deciding event</dt><dd>frames <strong>40&ndash;70</strong> &mdash; &ldquo;the person releases the blue cap to roll down the slanted book&rdquo;</dd></div>
+</dl>
+<p class="note">A 3 fps view samples every 333&nbsp;ms. That is enough to notice a cup being lowered, and not enough to be
+sure <em>which</em> cup &mdash; which is why the interval is reported rather than resolved here. Measured on the previous
+system, wrong anchors sit on frames where the target moves 5&ndash;27&times; faster than at correct ones.</p>
+</div>
+<div class="step"><span class="n">Step 2</span>
+<h3>Re-sample <em>inside</em> that interval at 12 frames per second, and resolve which one it is</h3>
+<p>Same frame budget, spent where the information is. These panels are cropped to the region the look-alikes occupy, and
+the boxes are ground truth added for the reader so the ambiguity is visible &mdash; the model saw the full frames with no
+boxes at all. The three objects are near-identical; only the event tells them apart.</p>
+<p class="note">Annotation runs at about 1&nbsp;Hz, so between annotated frames the drawn ground truth is a linear
+interpolation and each caption says which frames it came from. On a slow object that is a fair approximation; on a fast
+one it is not, and the caption is the warning.</p>
+<div class="legend"><span><span class="swatch" style="background:var(--series-gt)"></span>the answer, labelled <code>id*</code></span><span><span class="swatch" style="background:#f0f0f0;border:1px solid var(--border)"></span>the other same-label objects, labelled by id</span></div>
+<div class="grid g3"><figure><img loading="lazy" src="assets/video_7276__q5/event_000040.jpg" alt="event frame 40"><figcaption>frame 40 &middot; 1.33s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/event_000045.jpg" alt="event frame 45"><figcaption>frame 45 &middot; 1.50s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/event_000051.jpg" alt="event frame 51"><figcaption>frame 51 &middot; 1.70s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/event_000055.jpg" alt="event frame 55"><figcaption>frame 55 &middot; 1.83s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/event_000061.jpg" alt="event frame 61"><figcaption>frame 61 &middot; 2.03s &middot; GT unreliable between annotations, not drawn</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/event_000070.jpg" alt="event frame 70"><figcaption>frame 70 &middot; 2.33s &middot; GT unreliable between annotations, not drawn</figcaption></figure></div>
+<div class="quote"><div class="k">Description before this stage</div>
+<p style="margin:6px 0 0">&ldquo;light blue cap&rdquo; &mdash; the class name, which here happens to be unique in the scene</p>
+<div class="k" style="margin-top:10px">Description after this stage</div>
+<p style="color:var(--text-primary);margin:6px 0 0">&ldquo;the small light blue cylindrical cap that the person repeatedly rolls down the slanted book&rdquo;</p></div>
+<dl class="kv">
+<div><dt>instance evidence</dt><dd>is repeatedly rolled down the slanted book</dd></div>
+<div><dt>identified</dt><dd>yes</dd></div>
+<div><dt>trigger frames offered back</dt><dd class="mono">[30, 150, 270] &middot; quality good</dd></div>
+</dl>
+<p class="note">A trigger frame is where the tracker will be initialised, so it is required to show the target complete,
+unoccluded, <em>stationary</em>, and separated from its look-alikes. A box that is correct but ambiguous propagates the
+wrong identity through the entire track.</p>
+</div>
+<div class="step"><span class="n">Step 3</span>
+<h3>Draw the box at original resolution, and only on frames the evaluator scores</h3>
+<p>Ground truth is annotated about every 30 frames and the official evaluator reads predictions only on annotated
+frames. The one box a model has directly confirmed is the most reliable box in the whole track, so it is placed where it
+can earn a true positive: the offered frames are restricted to that grid.</p>
+<div class="legend">
+<span><span class="swatch" style="background:var(--series-gt)"></span>GT</span>
+<span><span class="swatch" style="background:var(--series-v26)"></span>this method</span>
+<span><span class="swatch" style="background:var(--series-v1)"></span>previous system</span>
+</div>
+<div class="grid g2"><figure><img loading="lazy" src="assets/video_7276__q5/trigger_000030.jpg" alt="trigger frame 30">
+<figcaption>trigger frame 30, original resolution &mdash; IoU 0.71 for this method against 0.72 for the previous system</figcaption></figure>
+<div><dl class="kv">
+<div><dt>frames offered</dt><dd class="mono">[30, 0, 90, 120, 150, 210, 270, 300]</dd></div>
+<div><dt>anchors returned</dt><dd class="mono">[0, 30, 150, 270, 300]</dd></div>
+<div><dt>on a scored frame</dt><dd><strong>5 of 5</strong></dd></div>
+<div><dt>trigger used</dt><dd>frame 30, attempt 1</dd></div>
+</dl>
+<p class="note">The previous system placed its anchors at [10, 30, 50, 130, 160, 180, 260, 290] &mdash; freely chosen frames, most of which the evaluator never reads.</p></div></div>
+<table><thead><tr><th>Anchors</th><th>Placed</th><th>On a scored frame</th><th>Median IoU vs GT</th><th>Per-anchor IoU</th></tr></thead>
+<tbody><tr class="best"><td>this method</td><td>5</td><td>5</td><td>0.525</td><td style="text-align:left" class="mono">0:0.33, 30:0.71, 150:0.62, 270:0.52, 300:0.53</td></tr><tr><td>previous system</td><td>8</td><td>2</td><td>0.739</td><td style="text-align:left" class="mono">30:0.72, 180:0.75</td></tr></tbody></table>
+<p class="note">Here the previous system's anchors are individually the more accurate ones (median 0.739 against 0.525). What changes is where they land: 5 of 5 sit on a frame the evaluator reads, against 2 of 8.</p>
+</div>
+<div class="step"><span class="n">Step 4</span>
+<h3>Have a second, cheaper model check the pixels against the words</h3>
+<p>These are the exact images the verifier received &mdash; a zoomed crop with the proposed box drawn, plus one scene
+thumbnail. It sees no video, no reasoning, and no idea how the frame was chosen, so it cannot repeat the first model's
+mistake; it answers a different question, whether <em>these pixels</em> match <em>this text</em>. It never produces a
+box.</p>
+<p class="note">The box in these crops is drawn in the colour the production renderer uses, which is not this page's
+ground-truth green &mdash; these are unedited copies of what was sent, so the colour is left as it was.</p>
+<div class="grid g4"><figure><img loading="lazy" src="assets/video_7276__q5/verify_000000.jpg" alt="verifier crop 0"><figcaption>frame 0 &middot; right object yes &middot; tight yes &middot; complete yes</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/verify_000030.jpg" alt="verifier crop 30"><figcaption>frame 30 &middot; right object yes &middot; tight yes &middot; complete yes</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/verify_000150.jpg" alt="verifier crop 150"><figcaption>frame 150 &middot; right object yes &middot; tight yes &middot; complete yes</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/verify_000270.jpg" alt="verifier crop 270"><figcaption>frame 270 &middot; right object yes &middot; tight yes &middot; complete yes</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/verify_context_000030.jpg" alt="scene context"><figcaption>scene context, low resolution &mdash; for surroundings only</figcaption></figure></div>
+<dl class="kv">
+<div><dt>verdict</dt><dd><strong>5 of 5</strong> anchors accepted &middot; tier <code>verified</code></dd></div>
+<div><dt>verifier's own note</dt><dd>&ldquo;the box contains the light blue cap&rdquo;</dd></div>
+</dl>
+<p class="note">Only &ldquo;right object&rdquo; can reject an anchor. The two geometry flags rank anchors but never delete
+one &mdash; an earlier version of this rule discarded 7 of 8 good anchors, because an axis-aligned box on a slanted object
+unavoidably encloses background, and because a box that spans a partly hidden object is <em>correct</em> here rather than
+incomplete. When look-alikes are present the verifier is explicitly told it cannot know <em>which</em> one this is from a
+single frame, and not to guess.</p>
+</div>
+<div class="step"><span class="n">Step 5</span>
+<h3>Propagate from the verified anchors, and score every annotated frame</h3>
+<p>SAM2.1 runs forwards and backwards from up to eight temporally spread verified anchors. Outlined panels are anchor
+frames; the rest are propagated. The previous system is on the wrong cup from the first frame to the last.</p>
+<div class="legend">
+<span><span class="swatch" style="background:var(--series-gt)"></span>GT</span>
+<span><span class="swatch" style="background:var(--series-v26)"></span>this method</span>
+<span><span class="swatch" style="background:var(--series-v1)"></span>previous system</span>
+</div>
+<div class="grid g4"><figure class="mark"><img loading="lazy" src="assets/video_7276__q5/prop_000000.jpg" alt="frame 0"><figcaption>frame 0 &middot; anchor<br>IoU this method <strong>0.33</strong> &middot; previous 0.28</figcaption></figure><figure class="mark"><img loading="lazy" src="assets/video_7276__q5/prop_000030.jpg" alt="frame 30"><figcaption>frame 30 &middot; anchor<br>IoU this method <strong>0.71</strong> &middot; previous 0.72</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/prop_000060.jpg" alt="frame 60"><figcaption>frame 60<br>IoU this method <strong>0.51</strong> &middot; previous 0.51</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/prop_000120.jpg" alt="frame 120"><figcaption>frame 120<br>IoU this method <strong>0.46</strong> &middot; previous 0.46</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/prop_000180.jpg" alt="frame 180"><figcaption>frame 180<br>IoU this method <strong>0.70</strong> &middot; previous 0.75</figcaption></figure><figure><img loading="lazy" src="assets/video_7276__q5/prop_000240.jpg" alt="frame 240"><figcaption>frame 240<br>IoU this method <strong>0.65</strong> &middot; previous 0.54</figcaption></figure><figure class="mark"><img loading="lazy" src="assets/video_7276__q5/prop_000270.jpg" alt="frame 270"><figcaption>frame 270 &middot; anchor<br>IoU this method <strong>0.52</strong> &middot; previous 0.48</figcaption></figure><figure class="mark"><img loading="lazy" src="assets/video_7276__q5/prop_000300.jpg" alt="frame 300"><figcaption>frame 300 &middot; anchor<br>IoU this method <strong>0.53</strong> &middot; previous 0.48</figcaption></figure></div>
+<div class="chart"><svg viewBox="0 0 880 240" role="img" aria-label="Per-frame IoU against ground truth"><line class="grid-line" x1="42" y1="206.0" x2="784" y2="206.0"/><text class="tick" x="34" y="209.5" text-anchor="end">0.00</text><line class="grid-line" x1="42" y1="158.0" x2="784" y2="158.0"/><text class="tick" x="34" y="161.5" text-anchor="end">0.25</text><line class="grid-line" x1="42" y1="110.0" x2="784" y2="110.0"/><text class="tick" x="34" y="113.5" text-anchor="end">0.50</text><line class="grid-line" x1="42" y1="62.0" x2="784" y2="62.0"/><text class="tick" x="34" y="65.5" text-anchor="end">0.75</text><line class="grid-line" x1="42" y1="14.0" x2="784" y2="14.0"/><text class="tick" x="34" y="17.5" text-anchor="end">1.00</text><line class="axis" x1="42" y1="14" x2="42" y2="206"/><text class="tick" x="42.0" y="224" text-anchor="middle">0</text><text class="tick" x="468.7" y="224" text-anchor="middle">180</text><text class="tick" x="784.0" y="224" text-anchor="middle">313</text><text class="lbl" x="413" y="236" text-anchor="middle">annotated frame</text><text class="lbl" x="12" y="110" text-anchor="middle" transform="rotate(-90 12 110)">IoU vs GT</text><path d="M42.0,152.3 L113.1,67.1 L184.2,108.2 L210.3,206.0 L319.4,206.0 L326.5,117.5 L397.6,88.6 L468.7,61.3 L520.9,199.0 L606.2,183.6 L610.9,101.6 L682.1,113.4 L753.2,113.3 L784.0,206.0" fill="none" stroke="var(--series-v1)" stroke-width="2" stroke-linejoin="round"/><circle cx="42.0" cy="152.3" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 0: IoU 0.280</title></circle><circle cx="113.1" cy="67.1" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 30: IoU 0.724</title></circle><circle cx="184.2" cy="108.2" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 60: IoU 0.510</title></circle><circle cx="210.3" cy="206.0" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 71: IoU 0.000</title></circle><circle cx="319.4" cy="206.0" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 117: IoU 0.000</title></circle><circle cx="326.5" cy="117.5" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 120: IoU 0.461</title></circle><circle cx="397.6" cy="88.6" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 150: IoU 0.611</title></circle><circle cx="468.7" cy="61.3" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 180: IoU 0.754</title></circle><circle cx="520.9" cy="199.0" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 202: IoU 0.036</title></circle><circle cx="606.2" cy="183.6" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 238: IoU 0.117</title></circle><circle cx="610.9" cy="101.6" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 240: IoU 0.544</title></circle><circle cx="682.1" cy="113.4" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 270: IoU 0.482</title></circle><circle cx="753.2" cy="113.3" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 300: IoU 0.483</title></circle><circle cx="784.0" cy="206.0" r="4" fill="var(--series-v1)" stroke="var(--surface-1)" stroke-width="2"><title>frame 313: IoU 0.000</title></circle><text class="lbl" x="794.0" y="210.0" fill="var(--series-v1)">previous system</text><path d="M42.0,143.6 L113.1,69.2 L184.2,108.2 L210.3,206.0 L319.4,206.0 L326.5,117.5 L397.6,87.7 L468.7,71.4 L520.9,199.0 L606.2,186.8 L610.9,82.0 L682.1,107.2 L753.2,105.1 L784.0,206.0" fill="none" stroke="var(--series-v26)" stroke-width="2" stroke-linejoin="round"/><circle cx="42.0" cy="143.6" r="5" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 0: IoU 0.325 (anchor)</title></circle><circle cx="113.1" cy="69.2" r="5" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 30: IoU 0.713 (anchor)</title></circle><circle cx="184.2" cy="108.2" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 60: IoU 0.510</title></circle><circle cx="210.3" cy="206.0" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 71: IoU 0.000</title></circle><circle cx="319.4" cy="206.0" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 117: IoU 0.000</title></circle><circle cx="326.5" cy="117.5" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 120: IoU 0.461</title></circle><circle cx="397.6" cy="87.7" r="5" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 150: IoU 0.616 (anchor)</title></circle><circle cx="468.7" cy="71.4" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 180: IoU 0.701</title></circle><circle cx="520.9" cy="199.0" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 202: IoU 0.037</title></circle><circle cx="606.2" cy="186.8" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 238: IoU 0.100</title></circle><circle cx="610.9" cy="82.0" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 240: IoU 0.646</title></circle><circle cx="682.1" cy="107.2" r="5" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 270: IoU 0.515 (anchor)</title></circle><circle cx="753.2" cy="105.1" r="5" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 300: IoU 0.525 (anchor)</title></circle><circle cx="784.0" cy="206.0" r="4" fill="var(--series-v26)" stroke="var(--surface-1)" stroke-width="2"><title>frame 313: IoU 0.000</title></circle><text class="lbl" x="794.0" y="210.0" fill="var(--series-v26)">this method</text></svg>
+<p class="note">IoU against ground truth on every annotated frame. Larger dots are anchor frames. Hover a point for its value.</p>
+<details><summary>Table view</summary>
+<table><thead><tr><th>Frame</th><th>This method</th><th>Previous system</th></tr></thead><tbody><tr><td>0 (anchor)</td><td>0.325</td><td>0.280</td></tr><tr><td>30 (anchor)</td><td>0.713</td><td>0.724</td></tr><tr><td>60</td><td>0.510</td><td>0.510</td></tr><tr><td>71</td><td>0.000</td><td>0.000</td></tr><tr><td>117</td><td>0.000</td><td>0.000</td></tr><tr><td>120</td><td>0.461</td><td>0.461</td></tr><tr><td>150 (anchor)</td><td>0.616</td><td>0.611</td></tr><tr><td>180</td><td>0.701</td><td>0.754</td></tr><tr><td>202</td><td>0.037</td><td>0.036</td></tr><tr><td>238</td><td>0.100</td><td>0.117</td></tr><tr><td>240</td><td>0.646</td><td>0.544</td></tr><tr><td>270 (anchor)</td><td>0.515</td><td>0.482</td></tr><tr><td>300 (anchor)</td><td>0.525</td><td>0.483</td></tr><tr><td>313</td><td>0.000</td><td>0.000</td></tr></tbody></table>
+</details></div>
+</div>
+<hr class="rule">
 <h2>The same comparison across 688 held-out questions</h2>
 <p>One case can be lucky, so the whole thing was measured on 688 Valid questions that this project had
 never touched, with the <em>same</em> tracker on both sides and only the anchors changed. This offline loop is what the
@@ -256,6 +361,29 @@ remaining defect.</p>
 258M prompt tokens &middot; event scan 1,859 /
 disambiguation 3,234 / grounding 3,387 /
 verification 3,346</p>
+<hr class="rule">
+<h2>What happens when the target moves</h2>
+<p>The walked-through case has a target that mostly sits still, which is the easy end of this benchmark. Splitting all
+688 questions by how fast the target actually moves &mdash; measured as
+ground-truth centre displacement in object diagonals per second &mdash; separates the two things that get
+confused: how hard a question is, and how much this method helps.</p>
+<table><thead><tr><th>Target motion</th><th>Speed range</th><th>Questions</th><th>v1 anchors</th><th>v26 anchors</th><th>Difference</th></tr></thead>
+<tbody><tr><td>slowest quarter</td><td>0.000 &ndash; 0.010</td><td>172</td><td>0.5554</td><td>0.6575</td><td class="good">+0.1021</td></tr><tr><td>second quarter</td><td>0.010 &ndash; 0.055</td><td>172</td><td>0.5584</td><td>0.6243</td><td class="good">+0.0659</td></tr><tr><td>third quarter</td><td>0.056 &ndash; 0.276</td><td>172</td><td>0.4307</td><td>0.5693</td><td class="good">+0.1387</td></tr><tr><td>fastest quarter</td><td>0.276 &ndash; 5.999</td><td>172</td><td>0.3503</td><td>0.4606</td><td class="good">+0.1103</td></tr></tbody></table>
+<p>Motion dominates difficulty: this method scores 0.6575 on the slowest quarter and 0.4606 on the
+fastest, a gap of 0.197. But the gain from better anchors does <em>not</em> shrink with speed
+&mdash; it holds across all four groups. Fast targets are hard for a reason that has nothing to do with grounding.</p>
+<h3>Where the fast questions are actually lost</h3>
+<table><thead><tr><th>Group</th><th>Scored frames</th><th>Median IoU on anchor frames</th><th>On propagated frames</th><th>Propagated, by distance from an anchor</th></tr></thead>
+<tbody><tr><td>fastest quarter</td><td>4,329</td><td>0.802 <span style="color:var(--text-muted)">(1,534)</span></td><td>0.194 <span style="color:var(--text-muted)">(2,795)</span></td><td style="text-align:left">within 44 frames 0.505 <span style="color:var(--text-muted)">(1,060 frames)</span> &middot; 45 frames or more 0.063 <span style="color:var(--text-muted)">(1,735 frames)</span></td></tr><tr><td>the other three quarters</td><td>18,370</td><td>0.859 <span style="color:var(--text-muted)">(6,329)</span></td><td>0.674 <span style="color:var(--text-muted)">(12,041)</span></td><td style="text-align:left">within 44 frames 0.800 <span style="color:var(--text-muted)">(4,734 frames)</span> &middot; 45 frames or more 0.469 <span style="color:var(--text-muted)">(7,307 frames)</span></td></tr></tbody></table>
+<p>Anchor frames are strong in both groups. Everything is lost on the frames in between, and it degrades with distance
+from the nearest verified anchor &mdash; on fast targets the far frames collapse almost completely. The boxes are not
+mis-sized either; the median predicted-to-true area ratio stays near 0.91 throughout. What fails is keeping up with the
+object, not finding it.</p>
+<p class="note">Two things follow directly, and both are cheap to test offline. A 600-frame video has only about twenty
+scored frames, and the anchor budget is currently eight; raising it so that every scored frame is close to a verified
+anchor would convert propagated frames into anchor frames, which are the strong ones. Separately, propagation currently
+samples at 3 frames per second, which for an object crossing its own width in under a tenth of a second is coarse.
+Neither needs a new model.</p>
 <hr class="rule">
 <h2>What went wrong first, and what it cost</h2>
 <p>The grounding was finished and measured before any of these submissions, and the first two still lost. The mistake was
