@@ -1,0 +1,715 @@
+{
+  "version": "pt2-v26-method-report-v1",
+  "split": "valid",
+  "runs": {
+    "v26_grounding": "pt2_v26_acceptance_v1",
+    "baseline_grounding": "pt2_v26_baselineA_flash_v1",
+    "v26_tracking": "pt2_v26_valid_sam2_v26anchors",
+    "baseline_tracking": "pt2_v26_valid_sam2_v1anchors"
+  },
+  "headline": {
+    "submissions": [
+      {
+        "run": "pt2_v25_test_temporal_global_decoder_v1",
+        "submission_id": 579335,
+        "method": "PT2-OWLv2-DINO-TemporalGlobal-v25",
+        "hota": 0.4743748903274536
+      },
+      {
+        "run": "pt2_v26_test_conservative_v1",
+        "submission_id": 579375,
+        "method": "PT2-VerifiedAnchorGrounding-v26",
+        "hota": 0.47299790382385254
+      },
+      {
+        "run": "pt2_v26_test_tracklet_conservative_v1",
+        "submission_id": 579399,
+        "method": "PT2-VerifiedAnchorTracklet-v26",
+        "hota": 0.46205294132232666
+      },
+      {
+        "run": "pt2_v26_test_full_sam2_v1",
+        "submission_id": 579407,
+        "method": "PT2-VerifiedAnchorGrounding-Full-v26",
+        "hota": 0.5063116550445557
+      }
+    ],
+    "winner_2025": {
+      "team": "SGVR@KAIST",
+      "hota": 0.4968439042568207
+    }
+  },
+  "aggregate": {
+    "end_to_end": {
+      "v1": {
+        "HOTA": 0.47369586006922587,
+        "DetA": 0.46593047320662806,
+        "AssA": 0.4898676505919427,
+        "LocA": 0.8626016854605382,
+        "count_accuracy": 0.9665697674418605,
+        "questions": 688
+      },
+      "v26": {
+        "HOTA": 0.5779418250721388,
+        "DetA": 0.5684045406063333,
+        "AssA": 0.5933100391297228,
+        "LocA": 0.8663616812528605,
+        "count_accuracy": 0.9578488372093024,
+        "questions": 688
+      }
+    },
+    "anchors": {
+      "v1_flash": {
+        "all_anchors_wrong_share": 0.25906735751295334,
+        "wrong_object_share": 0.17382657120127287,
+        "iou_ge_050": 0.7446300715990454,
+        "on_grid_share": 0.2918165989553105,
+        "scored_anchors": 2514
+      },
+      "v1_pro": {
+        "all_anchors_wrong_share": 0.11764705882352941,
+        "wrong_object_share": 0.09896983075791023,
+        "iou_ge_050": 0.8454746136865342,
+        "on_grid_share": 0.3199529134785168,
+        "scored_anchors": 2718
+      },
+      "v26": {
+        "all_anchors_wrong_share": 0.06699751861042183,
+        "wrong_object_share": 0.07326683905922916,
+        "iou_ge_050": 0.8729220539342446,
+        "on_grid_share": 0.9918172936003908,
+        "scored_anchors": 8121
+      }
+    },
+    "test_ledger": {
+      "completed_questions": 1859,
+      "failed_questions": 0,
+      "targets": 3234,
+      "verified_targets": 3188,
+      "api_calls": 11826,
+      "prompt_tokens": 258275188,
+      "calls_by_stage": {
+        "event_scan": 1859,
+        "instance_disambiguation": 3234,
+        "trigger_ground": 3387,
+        "anchor_verify": 3346
+      }
+    }
+  },
+  "cases": [
+    {
+      "key": "video_7110__q8",
+      "video_id": "video_7110",
+      "question_id": 8,
+      "question": "The person uses multiple similar or identical objects to play an occlusion game. Track the object that occludes the smaller object.",
+      "video": {
+        "frames": 626,
+        "fps": 30.005,
+        "resolution": [
+          720,
+          1280
+        ]
+      },
+      "gt": {
+        "answer_track_ids": [
+          2
+        ],
+        "label": "cup",
+        "scored_frames": [
+          0,
+          30,
+          60,
+          90,
+          120,
+          150,
+          180,
+          210,
+          240,
+          270,
+          300,
+          330,
+          360,
+          390,
+          420,
+          450,
+          480,
+          510,
+          540,
+          570,
+          600
+        ],
+        "look_alike_track_ids": [
+          0,
+          1,
+          2
+        ]
+      },
+      "stage1_event_scan": {
+        "reasoning": "The person lifts the rightmost cup, revealing a small red object, and then places the cup back down over it. This cup is the target.",
+        "look_alike_instances": 2,
+        "deciding_event": {
+          "start_frame": 220,
+          "end_frame": 240,
+          "what_happens": "the cup is lowered over the small red object"
+        }
+      },
+      "stage2_instance": {
+        "description": "the rightmost of the three identical cups, which is lifted to reveal a small red object and then placed back over it",
+        "grounding_phrase": "cup",
+        "instance_evidence": "is the rightmost cup and is placed over the small red object",
+        "identified": true,
+        "trigger_frame_ids": [
+          0,
+          90,
+          300
+        ],
+        "trigger_quality": "good"
+      },
+      "stage3_ground": {
+        "offered_frame_ids": [
+          0,
+          30,
+          90,
+          120,
+          180,
+          240,
+          270,
+          330
+        ],
+        "anchor_frame_ids": [
+          0,
+          30,
+          90,
+          120,
+          180,
+          240,
+          270,
+          330
+        ],
+        "anchors_on_evaluation_grid": 8,
+        "trigger_frame_id": 0,
+        "trigger_attempt": 0
+      },
+      "stage4_verify": {
+        "confidence_tier": "verified",
+        "proposed_anchors": 8,
+        "accepted_anchors": 8,
+        "verdicts": [
+          {
+            "frame_id": 0,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 30,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 90,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 120,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 180,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 240,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 270,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          },
+          {
+            "frame_id": 330,
+            "contains_described_object": true,
+            "is_tight": true,
+            "is_amodal_complete": true,
+            "instance_check_possible": false,
+            "reason": "look-alike cups present"
+          }
+        ]
+      },
+      "stage_timing": [
+        {
+          "stage": "event_scan",
+          "seconds": 49.253,
+          "model": "gemini-3.1-pro-preview"
+        },
+        {
+          "stage": "instance_disambiguation",
+          "seconds": 20.073,
+          "model": "gemini-3.1-pro-preview"
+        },
+        {
+          "stage": "trigger_ground",
+          "seconds": 38.655,
+          "model": "gemini-3.1-pro-preview"
+        },
+        {
+          "stage": "anchor_verify",
+          "seconds": 9.326,
+          "model": "gemini-3.5-flash"
+        }
+      ],
+      "anchor_iou": {
+        "v26": {
+          "anchors": 8,
+          "on_scored_frames": 8,
+          "values": [
+            [
+              0,
+              0.95
+            ],
+            [
+              30,
+              0.93
+            ],
+            [
+              90,
+              0.954
+            ],
+            [
+              120,
+              0.804
+            ],
+            [
+              180,
+              0.676
+            ],
+            [
+              240,
+              0.551
+            ],
+            [
+              270,
+              0.907
+            ],
+            [
+              330,
+              0.857
+            ]
+          ],
+          "median": 0.882
+        },
+        "v1": {
+          "anchors": 8,
+          "on_scored_frames": 4,
+          "values": [
+            [
+              0,
+              0.0
+            ],
+            [
+              210,
+              0.0
+            ],
+            [
+              270,
+              0.0
+            ],
+            [
+              300,
+              0.0
+            ]
+          ],
+          "median": 0.0
+        }
+      },
+      "frame_iou": [
+        {
+          "frame_id": 0,
+          "is_anchor": true,
+          "v26": 0.9498,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 30,
+          "is_anchor": true,
+          "v26": 0.9304,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 60,
+          "is_anchor": false,
+          "v26": 0.9711,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 90,
+          "is_anchor": true,
+          "v26": 0.9544,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 120,
+          "is_anchor": true,
+          "v26": 0.8036,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 150,
+          "is_anchor": false,
+          "v26": 0.9238,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 180,
+          "is_anchor": true,
+          "v26": 0.6755,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 210,
+          "is_anchor": false,
+          "v26": 0.8292,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 240,
+          "is_anchor": true,
+          "v26": 0.5509,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 270,
+          "is_anchor": true,
+          "v26": 0.9071,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 300,
+          "is_anchor": false,
+          "v26": 0.9665,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 330,
+          "is_anchor": true,
+          "v26": 0.8569,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 360,
+          "is_anchor": false,
+          "v26": 0.9062,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 390,
+          "is_anchor": false,
+          "v26": 0.9697,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 420,
+          "is_anchor": false,
+          "v26": 0.9382,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 450,
+          "is_anchor": false,
+          "v26": 0.9271,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 480,
+          "is_anchor": false,
+          "v26": 0.9366,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 510,
+          "is_anchor": false,
+          "v26": 0.8918,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 540,
+          "is_anchor": false,
+          "v26": 0.6587,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 570,
+          "is_anchor": false,
+          "v26": 0.6675,
+          "v1": 0.0
+        },
+        {
+          "frame_id": 600,
+          "is_anchor": false,
+          "v26": 0.9242,
+          "v1": 0.0
+        }
+      ],
+      "question_hota": {
+        "v1": {
+          "HOTA": 0.0,
+          "DetA": 0.0,
+          "AssA": 0.0,
+          "LocA": 1.0
+        },
+        "v26": {
+          "HOTA": 0.8403829680895304,
+          "DetA": 0.8403829680895304,
+          "AssA": 0.8403829680895304,
+          "LocA": 0.8866008926652148
+        }
+      },
+      "steps": {
+        "timeline": [
+          {
+            "frame_id": 0,
+            "seconds": 0.0,
+            "image": "assets/video_7110__q8/timeline_000000.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 90,
+            "seconds": 3.0,
+            "image": "assets/video_7110__q8/timeline_000090.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 180,
+            "seconds": 6.0,
+            "image": "assets/video_7110__q8/timeline_000180.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 270,
+            "seconds": 9.0,
+            "image": "assets/video_7110__q8/timeline_000270.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 360,
+            "seconds": 12.0,
+            "image": "assets/video_7110__q8/timeline_000360.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 450,
+            "seconds": 15.0,
+            "image": "assets/video_7110__q8/timeline_000450.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 540,
+            "seconds": 18.0,
+            "image": "assets/video_7110__q8/timeline_000540.jpg",
+            "in_event": false
+          },
+          {
+            "frame_id": 625,
+            "seconds": 20.83,
+            "image": "assets/video_7110__q8/timeline_000625.jpg",
+            "in_event": false
+          }
+        ],
+        "event_window": [
+          {
+            "frame_id": 220,
+            "seconds": 7.33,
+            "image": "assets/video_7110__q8/event_000220.jpg"
+          },
+          {
+            "frame_id": 223,
+            "seconds": 7.43,
+            "image": "assets/video_7110__q8/event_000223.jpg"
+          },
+          {
+            "frame_id": 226,
+            "seconds": 7.53,
+            "image": "assets/video_7110__q8/event_000226.jpg"
+          },
+          {
+            "frame_id": 230,
+            "seconds": 7.67,
+            "image": "assets/video_7110__q8/event_000230.jpg"
+          },
+          {
+            "frame_id": 235,
+            "seconds": 7.83,
+            "image": "assets/video_7110__q8/event_000235.jpg"
+          },
+          {
+            "frame_id": 240,
+            "seconds": 8.0,
+            "image": "assets/video_7110__q8/event_000240.jpg"
+          }
+        ],
+        "trigger": {
+          "frame_id": 0,
+          "image": "assets/video_7110__q8/trigger_000000.jpg",
+          "v1_anchor_shown": true,
+          "v1_anchor_frame_ids": [
+            0,
+            20,
+            100,
+            210,
+            230,
+            270,
+            300,
+            310
+          ]
+        },
+        "verify": [
+          {
+            "frame_id": 0,
+            "image": "assets/video_7110__q8/verify_000000.jpg",
+            "verdict": {
+              "frame_id": 0,
+              "contains_described_object": true,
+              "is_tight": true,
+              "is_amodal_complete": true,
+              "instance_check_possible": false,
+              "reason": "look-alike cups present"
+            }
+          },
+          {
+            "frame_id": 30,
+            "image": "assets/video_7110__q8/verify_000030.jpg",
+            "verdict": {
+              "frame_id": 30,
+              "contains_described_object": true,
+              "is_tight": true,
+              "is_amodal_complete": true,
+              "instance_check_possible": false,
+              "reason": "look-alike cups present"
+            }
+          },
+          {
+            "frame_id": 90,
+            "image": "assets/video_7110__q8/verify_000090.jpg",
+            "verdict": {
+              "frame_id": 90,
+              "contains_described_object": true,
+              "is_tight": true,
+              "is_amodal_complete": true,
+              "instance_check_possible": false,
+              "reason": "look-alike cups present"
+            }
+          },
+          {
+            "frame_id": 120,
+            "image": "assets/video_7110__q8/verify_000120.jpg",
+            "verdict": {
+              "frame_id": 120,
+              "contains_described_object": true,
+              "is_tight": true,
+              "is_amodal_complete": true,
+              "instance_check_possible": false,
+              "reason": "look-alike cups present"
+            }
+          },
+          {
+            "frame_id": null,
+            "image": "assets/video_7110__q8/verify_context_000000.jpg",
+            "verdict": null,
+            "context": true
+          }
+        ],
+        "propagation": [
+          {
+            "frame_id": 0,
+            "seconds": 0.0,
+            "image": "assets/video_7110__q8/prop_000000.jpg",
+            "is_anchor": true,
+            "iou_v26": 0.95,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 90,
+            "seconds": 3.0,
+            "image": "assets/video_7110__q8/prop_000090.jpg",
+            "is_anchor": true,
+            "iou_v26": 0.954,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 180,
+            "seconds": 6.0,
+            "image": "assets/video_7110__q8/prop_000180.jpg",
+            "is_anchor": true,
+            "iou_v26": 0.676,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 270,
+            "seconds": 9.0,
+            "image": "assets/video_7110__q8/prop_000270.jpg",
+            "is_anchor": true,
+            "iou_v26": 0.907,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 330,
+            "seconds": 11.0,
+            "image": "assets/video_7110__q8/prop_000330.jpg",
+            "is_anchor": true,
+            "iou_v26": 0.857,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 420,
+            "seconds": 14.0,
+            "image": "assets/video_7110__q8/prop_000420.jpg",
+            "is_anchor": false,
+            "iou_v26": 0.938,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 510,
+            "seconds": 17.0,
+            "image": "assets/video_7110__q8/prop_000510.jpg",
+            "is_anchor": false,
+            "iou_v26": 0.892,
+            "iou_v1": 0.0
+          },
+          {
+            "frame_id": 600,
+            "seconds": 20.0,
+            "image": "assets/video_7110__q8/prop_000600.jpg",
+            "is_anchor": false,
+            "iou_v26": 0.924,
+            "iou_v1": 0.0
+          }
+        ]
+      }
+    }
+  ]
+}
